@@ -73,23 +73,17 @@ var tableCells = colors.length;
 var height = document.getElementById('table').rows.length;
 var rowLength = Math.ceil((tableCells/height)); // +1 if #/10 
 
-function checkHorizontalBoundaries(args, dir) {
-	if (dir === 'right') {
-		if (args % rowLength === 0) {  
-			return false; 
-		} 
-	}
-
-	if (dir === 'left') {
-		if ((args+1) % rowLength === 0) {  
-			return false; 
-		}
+// args is currentPos, dir = direction
+function checkBoundaries(args) {
+	let cell = colors[args].classList;
+	if (cell.contains('wall')) {
+		return false; 
 	}
 	return true; 
 }
 
 // build walls 
-buildWalls(); 
+buildWalls();
 
 // add snake food at random location on grid 
 function generateFood() {
@@ -112,10 +106,6 @@ function snakeChange() {
 
 // takes 'lastPos' as argument 
 function snakeDies(snake) {
-	snake = snake.reverse(); 
-	for (let i = 0; i < snake.length; i++) {
-    snake[i].style.backgroundColor = yellowone; 
-	}
 	// return to menu
 	setTimeout(function(){
 		for (let i = 0; i < colors.length; i++) {
@@ -136,12 +126,7 @@ function snakeDies(snake) {
 function startGame() {
 
 	// initializes snake + food
-	if (
-			direction === 'down' || 
-			direction === 'up' || 
-			direction === 'right' || 
-			direction === 'left'
-			) {
+	if (direction === 'down' || direction === 'up' || direction === 'right' || direction === 'left') {
 		if (moves === 0) {
 			colors[currentPos].style.backgroundColor = yellow;
 			generateFood(); 
@@ -153,63 +138,53 @@ function startGame() {
 	if (direction == 'right') {
 		moves++;  
 		currentPos++;
-		if (colors[currentPos].style.backgroundColor !== yellow) {
-			if (!checkHorizontalBoundaries(currentPos, direction)) {
-				snakeDies(lastPos); 
-			} else {
-				colors[currentPos].style.backgroundColor = yellow;
-				lastPos.push(colors[currentPos]);
-				snakeChange(); 
-			}
+		if (!checkBoundaries(currentPos)) {
+			direction = null;
+			--currentPos;
 		} else {
-			snakeDies(lastPos); 
-		} 
+			colors[currentPos].style.backgroundColor = yellow;
+			lastPos.push(colors[currentPos]);
+			snakeChange(); 
+		}
 	}
 
 	if (direction === 'left') {
 		moves++;
 		--currentPos;
-		if (colors[currentPos].style.backgroundColor !== yellow) {
-			if (!checkHorizontalBoundaries(currentPos, direction)) {
-				snakeDies(lastPos);
-			} else {
-				colors[currentPos].style.backgroundColor = yellow;
-				lastPos.push(colors[currentPos]);
-				snakeChange();
-			}
+		if (!checkBoundaries(currentPos)) {
+			direction = null;
+			currentPos++; 
 		} else {
-			snakeDies(lastPos); 
+			colors[currentPos].style.backgroundColor = yellow;
+			lastPos.push(colors[currentPos]);
+			snakeChange();
 		}
 	}
 
 	if (direction === 'down' && moves > 0) {
 		moves++;
 		currentPos+=rowLength;  
-		if (!colors[currentPos]) {
-			snakeDies(lastPos);
-		}
-		if (colors[currentPos].style.backgroundColor !== yellow) {
+		if (!checkBoundaries(currentPos)) {
+			direction = null;
+			currentPos = currentPos - (rowLength);
+		} else {
 			colors[currentPos].style.backgroundColor = yellow;
 			lastPos.push(colors[currentPos]);  
 			snakeChange();
-		} else {
-			snakeDies(lastPos);
 		}
 	}
 
 	if (direction === 'up') {
 		moves++;
 		currentPos = currentPos - (rowLength);
-		if (!colors[currentPos]) {
-			snakeDies(lastPos);
-		}
-		if (colors[currentPos].style.backgroundColor !== yellow) {
+		if (!checkBoundaries(currentPos)) {
+			direction = null;
+			currentPos = currentPos + (rowLength);
+		} else {
 			colors[currentPos].style.backgroundColor = yellow;
 			lastPos.push(colors[currentPos]); 
 			snakeChange();
-		} else {
-			snakeDies(lastPos);
-		} 
+		}
 	}
 
 	for (var s = 0; s < foodLocation.length; s++) {
@@ -254,7 +229,6 @@ function startGame() {
 		}
 	}
 
-	// 
 	scoreBoard.textContent = `Points: ${points}`;
 
 	d.onkeyup = d.body.onkeyup = function(e){

@@ -86,6 +86,39 @@ var spots = document.getElementsByClassName('color');
 			spots[i].classList.toggle('wall-left-end');
 		}
 
+		// first row islands left - right 
+		if (i > 57 && i < 62 ||
+			i > 85 && i < 90 ||
+			i > 113 && i < 118){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}	
+
+		if (i > 62 && i < 68 ||
+			i > 90 && i < 96 ||
+			i > 118 && i < 124){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
+		if (i > 71 && i < 77 ||
+			i > 99 && i < 105 ||
+			i > 127 && i < 133){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
+		if (i > 77 && i < 82 ||
+			i > 105 && i < 110 ||
+			i > 133 && i < 138){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
 		// first row jutt out 
 		if (i > 40 && i < 43 ||
 			i > 68 && i < 71 ||

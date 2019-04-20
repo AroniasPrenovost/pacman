@@ -68,3 +68,7 @@ table, th, td {
 
 .wall-right-end {
   border-right: 6px solid #20265a; }
+
+/* characters */
+.pacman {
+  background-color: 'rgb(255, 238, 0)'; }
