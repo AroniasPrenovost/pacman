@@ -89,8 +89,32 @@ table, th, td {
 	background-color: rgb(255, 238, 0) !important; 
 }
 
-.clearpath {
-	background-color: rgb(255, 255, 255) !important;
+.redghost {
+	background-color: rgb(255, 0, 0) !important; 
+		position:relative;
+	width:10px;
+	height:10px;
+}
+
+.pinkghost {
+	background-color: rgb(255, 184, 255) !important;
+		position:relative;
+	width:10px;
+	height:10px; 
+}
+
+.cyanghost {
+	background-color: rgb(0, 255, 255) !important; 
+	position:relative;
+	width:10px;
+	height:10px;
+}
+
+.orangeghost {
+	background-color: rgb(255, 184, 82) !important; 
+	position:relative;
+	width:10px;
+	height:10px;
 }
 
 .token {

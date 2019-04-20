@@ -127,7 +127,29 @@ var spots = document.getElementsByClassName('color');
 			spots[i].classList.toggle('wall');
 			spots[i].classList.toggle('wall-left-end');
 			spots[i].classList.toggle('wall-right-end');
-		}	 
+		}
+
+		// middle top row jutt out 
+		if (i > 178 && i < 185 ||
+			i > 206 && i < 213 ||
+			i > 236 && i < 239 ||
+			i > 264 && i < 267) {
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
+		// middle ghost corral 
+		if (i > 318 && i < 325 ||
+			i > 346 && i < 348 ||
+			i > 351 && i < 353 ||
+			i > 374 && i < 376 ||
+			i > 379 && i < 381 ||
+			i > 402 && i < 409) {
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
 	}
 }
 

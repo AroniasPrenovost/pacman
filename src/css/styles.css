@@ -73,8 +73,29 @@ table, th, td {
 .pacman {
   background-color: #ffee00 !important; }
 
-.clearpath {
-  background-color: white !important; }
+.redghost {
+  background-color: red !important;
+  position: relative;
+  width: 10px;
+  height: 10px; }
+
+.pinkghost {
+  background-color: #ffb8ff !important;
+  position: relative;
+  width: 10px;
+  height: 10px; }
+
+.cyanghost {
+  background-color: cyan !important;
+  position: relative;
+  width: 10px;
+  height: 10px; }
+
+.orangeghost {
+  background-color: #ffb852 !important;
+  position: relative;
+  width: 10px;
+  height: 10px; }
 
 .token {
   background-color: #f39c12 !important;
