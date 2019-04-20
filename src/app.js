@@ -94,6 +94,18 @@ function generateFood() {
 	}
 }
 
+function populateTokens() {
+	for (var i = 0; i < colors.length; i++) {
+		if (!colors[i].classList.contains('wall')) {
+			var tokendiv = document.createElement('div');
+			tokendiv.classList.add('token');
+			colors[i].appendChild(tokendiv)
+		//	colors[i].classList.add('token');
+		}
+	}
+}
+populateTokens()
+
 // initialize snake length 
 function snakeChange() {
 	if (moves > 1) {

@@ -125,10 +125,9 @@ var spots = document.getElementsByClassName('color');
 			i > 96 && i < 99 ||
 			i > 124 && i < 127) {
 			spots[i].classList.toggle('wall');
-		spots[i].classList.toggle('wall-left-end');
-		spots[i].classList.toggle('wall-right-end');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
 		}	 
-		
 	}
 }
 

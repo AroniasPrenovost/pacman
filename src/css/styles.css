@@ -57,7 +57,7 @@ table, th, td {
   border-collapse: collapse;
   border: 1px solid green; }
 
-/* board styles */
+/* walls */
 .wall {
   background-color: black;
   border-top: 6px solid #20265a;
@@ -71,4 +71,13 @@ table, th, td {
 
 /* characters */
 .pacman {
-  background-color: 'rgb(255, 238, 0)'; }
+  background-color: #ffee00 !important; }
+
+.clearpath {
+  background-color: white !important; }
+
+.token {
+  background-color: #f39c12 !important;
+  position: relative;
+  width: 10px;
+  height: 10px; }
