@@ -1,0 +1,70 @@
+body {
+  background-color: black; }
+
+.game-container {
+  color: #cc7a08;
+  margin: 0 auto;
+  max-width: 700px;
+  height: 100%;
+  background-color: black;
+  border-radius: 0px;
+  border: 6px solid #20265a;
+  overflow: hidden; }
+
+.points-container {
+  margin: 0 auto;
+  max-width: 700px;
+  margin-top: 8px;
+  color: #cc7a08; }
+
+.menu {
+  text-align: center;
+  height: 100%; }
+
+.menu-content {
+  padding: 50px 50px;
+  color: #cc7a08; }
+
+p {
+  display: inline; }
+
+table {
+  border: none;
+  width: 100%;
+  background-color: none;
+  /* this can't match td color */ }
+
+#myDynamicTable {
+  display: none; }
+
+td {
+  background-color: transparent;
+  /* outer, trimmed table secton. not apart of play field */
+  border: 1px solid #f7f1e3;
+  font-size: 2px;
+  height: 10px;
+  vertical-align: bottom;
+  min-width: 12px;
+  padding: 0 0 0 0; }
+
+tr {
+  line-height: 0px;
+  height: 18px;
+  /* 500px / 23 rows */ }
+
+table, th, td {
+  border: 0px;
+  border-collapse: collapse;
+  border: 1px solid green; }
+
+/* board styles */
+.wall {
+  background-color: black;
+  border-top: 6px solid #20265a;
+  border-bottom: 6px solid #20265a; }
+
+.wall-left-end {
+  border-left: 6px solid #20265a; }
+
+.wall-right-end {
+  border-right: 6px solid #20265a; }
