@@ -2,15 +2,10 @@ import {generateTable, colorTable} from './modules/generateTable';
 import {buildWalls} from './modules/walls';
 import {shuffle} from './modules/shuffle';
 
-var white = 'white';
-var green = 'rgb(204, 122, 8)';
-var yellow = 'rgb(255, 238, 0)';
-var yellowone = 'rgb(52, 152, 219)'; 
-
 // initialize 
 generateTable();
 var colors = document.getElementsByClassName('color');
-colorTable(colors, white);
+colorTable(colors, 'white');
 
 var gameVar; 
 function stopGame() {
@@ -89,20 +84,16 @@ function checkBoundaries(args) {
 // build walls 
 buildWalls();
 
-// add snake food at random location on grid 
-function generateFood() {
-	let rand = shuffle([...Array(colors.length).keys()])[0];
-	if (colors[rand].style.backgroundColor !== green && !colors[rand].classList.contains('wall')) {
-		colors[rand].style.backgroundColor = green;
-		foodLocation.push(rand);  
-	}
+function openGhostDoor() {
+	colors[321].classList.remove('wall', 'wall-left-end', 'wall-right-end');
+	colors[322].classList.remove('wall', 'wall-left-end', 'wall-right-end');
 }
 
 function populateTokens() {
 	for (var i = 0; i < colors.length; i++) {
 		if (!colors[i].classList.contains('wall')) {
 			var tokendiv = document.createElement('div');
-			tokendiv.classList.add('token');
+			tokendiv.classList.add('piece', 'token');
 			colors[i].appendChild(tokendiv)
 		}
 	}
@@ -113,9 +104,20 @@ populateTokens();
 function getToken(args) {
 	let inner = args.innerHTML;
 	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
-	if (inner === 'token') {
+	if (inner.includes('token')) {
 		tokens++; 
 		tokenCount.textContent = `Tokens: ${tokens}`;
+		while (args.firstChild) args.removeChild(args.firstChild);
+	}
+}
+
+function getGhost(args) {
+	let inner = args.innerHTML;
+	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
+	let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
+	if(ghostNames.some(el => inner.includes(el))) {
+		points++; 
+		pointCount.textContent = `Points: ${points}`;
 		while (args.firstChild) args.removeChild(args.firstChild);
 	}
 }
@@ -128,19 +130,19 @@ for (var i = 0; i < removeTokens.length; i++) {
 
 function populateGhosts() {
 	var redghostdiv = document.createElement('div');
-	redghostdiv.classList.add('redghost');
+	redghostdiv.classList.add('piece', 'redghost');
 	colors[376].appendChild(redghostdiv);
 
 	var pinkghostdiv = document.createElement('div');
-	pinkghostdiv.classList.add('pinkghost');
+	pinkghostdiv.classList.add('piece', 'pinkghost');
 	colors[377].appendChild(pinkghostdiv);
 
 	var cyanghostdiv = document.createElement('div');
-	cyanghostdiv.classList.add('cyanghost');
+	cyanghostdiv.classList.add('piece', 'cyanghost');
 	colors[378].appendChild(cyanghostdiv);
 
 	var orangeghostdiv = document.createElement('div');
-	orangeghostdiv.classList.add('orangeghost');
+	orangeghostdiv.classList.add('piece', 'orangeghost');
 	colors[379].appendChild(orangeghostdiv); 
 }
 
@@ -149,8 +151,7 @@ populateGhosts();
 // initialize snake length 
 function snakeChange() {
 	if (moves > 1) {
-		//lastPos[0].style.backgroundColor = white;
-		lastPos[0].classList.remove('pacman');
+		lastPos[0].classList.remove('piece', 'pacman');
 		backup = lastPos[0];
 		lastPos.shift(); 
 		trimTail = true; 
@@ -162,7 +163,6 @@ function snakeDies(snake) {
 	// return to menu
 	setTimeout(function(){
 		for (let i = 0; i < colors.length; i++) {
-	    colors[i].style.backgroundColor = white; 
 	    moves = 0;  
 			lastPos.length = 0;
 			currentPos = 315;
@@ -181,8 +181,7 @@ function startGame() {
 	// initializes snake + food
 	if (direction === 'down' || direction === 'up' || direction === 'right' || direction === 'left') {
 		if (moves === 0) {
-			colors[currentPos].classList.add('pacman');
-			generateFood(); 
+			colors[currentPos].classList.add('piece', 'pacman');
 			moves++;
 			lastPos.push(colors[currentPos]); 
 		}
@@ -196,7 +195,8 @@ function startGame() {
 			--currentPos;
 		} else {
 			getToken(colors[currentPos]);
-			colors[currentPos].classList.add('pacman');
+			getGhost(colors[currentPos]);
+			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
 			snakeChange(); 
 		}
@@ -210,7 +210,8 @@ function startGame() {
 			currentPos++; 
 		} else {
 			getToken(colors[currentPos]);
-			colors[currentPos].classList.add('pacman');
+			getGhost(colors[currentPos]);
+			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
 			snakeChange();
 		}
@@ -224,7 +225,8 @@ function startGame() {
 			currentPos = currentPos - (rowLength);
 		} else {
 			getToken(colors[currentPos]);
-			colors[currentPos].classList.add('pacman');
+			getGhost(colors[currentPos]);
+			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);  
 			snakeChange();
 		}
@@ -238,43 +240,16 @@ function startGame() {
 			currentPos = currentPos + (rowLength);
 		} else {
 			getToken(colors[currentPos]);
-			colors[currentPos].classList.add('pacman');
+			getGhost(colors[currentPos]);
+			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]); 
 			snakeChange();
 		}
 	}
 
-	for (var s = 0; s < foodLocation.length; s++) {
-		if (direction === 'right'){
-			if (currentPos - 1 === foodLocation[s]) {
-				points+=1;  
-				return false; 
-			}
-		}
-
-		if (direction === 'left'){
-			if (currentPos + 1 === foodLocation[s]) { 
-				points+=1;  
-				return false; 
-			}
-		}
-
-		if (direction === 'down'){
-			if (currentPos - rowLength === foodLocation[s]) {
-				points+=1;  
-				return false; 
-			}
-		}
-
-		if (direction === 'up'){
-			if (currentPos + rowLength === foodLocation[s]) {
-				points+=1;  
-				return false; 
-			}
-		}
+	if (moves === 10) {
+		openGhostDoor();
 	}
-
-	pointCount.textContent = `Points: ${points}`;
 
 	d.onkeyup = d.body.onkeyup = function(e){
     if(e.keyCode == 32){

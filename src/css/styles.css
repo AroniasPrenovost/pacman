@@ -41,11 +41,10 @@ td {
   background-color: transparent;
   /* outer, trimmed table secton. not apart of play field */
   border: 1px solid #f7f1e3;
-  font-size: 2px;
-  height: 10px;
+  font-size: 10px;
   vertical-align: bottom;
   min-width: 12px;
-  padding: 0 0 0 0; }
+  padding: 0 0 4px 0; }
 
 tr {
   line-height: 0px;
@@ -70,35 +69,27 @@ table, th, td {
   border-right: 6px solid #20265a; }
 
 /* characters */
-.pacman {
-  background-color: #ffee00 !important; }
-
-.redghost {
-  background-color: red !important;
+.piece {
   position: relative;
-  width: 10px;
-  height: 10px; }
-
-.pinkghost {
-  background-color: #ffb8ff !important;
-  position: relative;
-  width: 10px;
-  height: 10px; }
-
-.cyanghost {
-  background-color: cyan !important;
-  position: relative;
-  width: 10px;
-  height: 10px; }
-
-.orangeghost {
-  background-color: #ffb852 !important;
-  position: relative;
+  bottom: 50%;
+  margin: 0 auto;
   width: 10px;
   height: 10px; }
 
 .token {
-  background-color: #f39c12 !important;
-  position: relative;
-  width: 10px;
-  height: 10px; }
+  background-color: #f39c12 !important; }
+
+.pacman {
+  background-color: #ffee00 !important; }
+
+.redghost {
+  background-color: red !important; }
+
+.pinkghost {
+  background-color: #ffb8ff !important; }
+
+.cyanghost {
+  background-color: cyan !important; }
+
+.orangeghost {
+  background-color: #ffb852 !important; }
