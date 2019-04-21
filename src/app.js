@@ -101,6 +101,21 @@ function populateTokens() {
 
 populateTokens();
 
+function populatePellets() {
+	let locations = [261, 80, 600, 721]; // to do... update placement
+	for (var value of locations) {
+		while (colors[value].firstChild) colors[value].removeChild(colors[value].firstChild);
+		var pelletdiv = document.createElement('div');
+		pelletdiv.classList.add('piece', 'pellet');
+		colors[value].appendChild(pelletdiv);
+	}	
+}
+
+populatePellets();
+
+// function getPowerPellet() {}
+// to do... 
+
 function getToken(args) {
 	let inner = args.innerHTML;
 	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");

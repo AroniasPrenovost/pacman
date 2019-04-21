@@ -79,6 +79,9 @@ table, th, td {
 .token {
   background-color: #f39c12 !important; }
 
+.pellet {
+  background-color: #6c4dc4 !important; }
+
 .pacman {
   background-color: #ffee00 !important; }
 
