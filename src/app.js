@@ -72,7 +72,7 @@ var tableCells = colors.length;
 var height = document.getElementById('table').rows.length;
 var rowLength = Math.ceil((tableCells/height)); // +1 if #/10 
 
-// args is currentPos, dir = direction
+// args is currentPos
 function checkBoundaries(args) {
 	let cell = colors[args].classList;
 	if (cell.contains('wall')) {
@@ -101,8 +101,8 @@ function populateTokens() {
 
 populateTokens();
 
-function populatePellets() {
-	let locations = [261, 80, 600, 721]; // to do... update placement
+function populatePowerPellets() {
+	let locations = [85, 110, 897, 922]; // to do... update placement
 	for (var value of locations) {
 		while (colors[value].firstChild) colors[value].removeChild(colors[value].firstChild);
 		var pelletdiv = document.createElement('div');
@@ -111,10 +111,34 @@ function populatePellets() {
 	}	
 }
 
-populatePellets();
+populatePowerPellets();
 
 // function getPowerPellet() {}
-// to do... 
+function getPowerPellet(args) {
+	let inner = args.innerHTML;
+	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
+	if (inner.includes('pellet')) {
+		// enable 'frightened mode' (ghosts are edible)
+		let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
+		let frightGhostNames = ['frightpinkghost', 'frightcyanghost', 'frightredghost', 'frightorangeghost']; 
+		for (var i = 0; i < ghostNames.length; i++) {
+			var g = document.getElementsByClassName(ghostNames[i])[0];
+			g.classList.remove(ghostNames[i]);
+			g.classList.add(frightGhostNames[i]);			
+			while (args.firstChild) args.removeChild(args.firstChild);
+		}
+		// return to regular mode after some time 
+		setTimeout(function(){ 
+			let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
+			let frightGhostNames = ['frightpinkghost', 'frightcyanghost', 'frightredghost', 'frightorangeghost']; 
+			for (var i = 0; i < ghostNames.length; i++) {
+				var g = document.getElementsByClassName(frightGhostNames[i])[0];
+				g.classList.remove(frightGhostNames[i]);
+				g.classList.add(ghostNames[i]);			
+			}
+		}, 3000);
+	}
+}
 
 function getToken(args) {
 	let inner = args.innerHTML;
@@ -210,6 +234,7 @@ function startGame() {
 			--currentPos;
 		} else {
 			getToken(colors[currentPos]);
+			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
@@ -225,6 +250,7 @@ function startGame() {
 			currentPos++; 
 		} else {
 			getToken(colors[currentPos]);
+			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
@@ -240,6 +266,7 @@ function startGame() {
 			currentPos = currentPos - (rowLength);
 		} else {
 			getToken(colors[currentPos]);
+			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]);  
@@ -255,6 +282,7 @@ function startGame() {
 			currentPos = currentPos + (rowLength);
 		} else {
 			getToken(colors[currentPos]);
+			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
 			lastPos.push(colors[currentPos]); 
