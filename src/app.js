@@ -159,6 +159,8 @@ function getGhost(args) {
 			points++; 
 			pointCount.textContent = `Points: ${points}`;
 			removeChild(args);
+		} else { // you die 
+			pacManDies(args); 
 		}
 	}
 }
@@ -170,8 +172,7 @@ for (var i = 0; i < removeTokens.length; i++) {
 } 
 
 function populateGhosts() {
-	// color + board location
-	function genGhostDiv(str, int) {
+	function genGhostDiv(str, int) { // color + board location
 		var elem = str + 'ghostdiv';
 		elem = document.createElement('div');
 		var ghostclass = str + 'ghost';
@@ -187,12 +188,21 @@ function populateGhosts() {
 
 populateGhosts();
 
-function pacManDies() {
+function resetGame() {
+	menu.style.display = 'block';
+	playField.style.display = 'none';
+}
+
+function pacManDies(args) {
+	removeChild(args); 
+	args.classList.remove('pacman');
+	args.classList.add('dead');
 	setTimeout(function(){
-		menu.style.display = 'block';
-		playField.style.display = 'none';
+		resetGame()
+		args.classList.add('pacman');
+		args.classList.remove('dead');
 	}, 2000);
-	 stopGame(); 
+	stopGame(); 
 }
 
 function startGame() {

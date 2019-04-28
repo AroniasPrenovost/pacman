@@ -85,6 +85,9 @@ table, th, td {
 .pacman {
   background-color: #ffee00 !important; }
 
+.dead {
+  background-color: black !important; }
+
 .redghost {
   background-color: red !important; }
 
