@@ -187,8 +187,34 @@ function populateGhosts() {
 populateGhosts();
 
 function resetGame() {
+	direction = null; 
 	menu.style.display = 'block';
 	playField.style.display = 'none';
+
+	currentPos = 315;  
+	lastPos = [];
+	moves = 0;
+	points = 0; 
+	tokens = 0;
+	tokenCount.textContent = `Tokens: ${tokens}`;
+	pointCount.textContent = `Points: ${points}`;
+
+	var elem = document.getElementById('table');
+	elem.remove();
+	generateTable();
+	var colors = document.getElementsByClassName('color');
+	colorTable(colors, 'white');
+
+	buildWalls();
+	populateTokens(); 
+	populatePowerPellets();
+
+	let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
+	for (var i = 0; i < removeTokens.length; i++) {
+		removeChild(colors[removeTokens[i]]);
+	}
+
+	populateGhosts();
 }
 
 function pacManDies(args) {
