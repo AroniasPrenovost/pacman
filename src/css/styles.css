@@ -97,8 +97,8 @@ table, th, td {
 .orangeghost {
   background-color: #ffb852 !important; }
 
-.frightpinkghost, .frightcyanghost, .frightredghost, .frightorangeghost {
-  background-color: #3742fa !important; }
-
 .ghost {
   background-color: #2121de !important; }
+
+.fright {
+  background-color: #3742fa !important; }

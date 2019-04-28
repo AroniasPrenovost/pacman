@@ -25,7 +25,6 @@ document.getElementById('slow').onclick = function(){
 	playField.style.display = 'block';
 }
 
-
 var tokens = 0;
 var tokenCount = document.getElementById('tokens');
 tokenCount.textContent = `Tokens: ${tokens}`;
@@ -62,9 +61,7 @@ d.onkeydown = d.body.onkeydown = function(e){
 // current board position based on total 'length'
 var currentPos = 315; // is middle start position 
 var lastPos = [];
-var trimTail = false;
-var foodLocation = [];
-var backup;  
+var foodLocation = []; 
 var moves = 0;
 
 // board specs 
@@ -101,10 +98,14 @@ function populateTokens() {
 
 populateTokens();
 
+function removeChild(args) {
+	while (args.firstChild) args.removeChild(args.firstChild);
+}
+
 function populatePowerPellets() {
 	let locations = [85, 110, 897, 922]; // to do... update placement
 	for (var value of locations) {
-		while (colors[value].firstChild) colors[value].removeChild(colors[value].firstChild);
+		removeChild(colors[value]);
 		var pelletdiv = document.createElement('div');
 		pelletdiv.classList.add('piece', 'pellet');
 		colors[value].appendChild(pelletdiv);
@@ -113,105 +114,84 @@ function populatePowerPellets() {
 
 populatePowerPellets();
 
-// function getPowerPellet() {}
+var ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
+var deadGhosts = []; 
+
+function getInner(args) {
+	args = args.innerHTML; 
+	return args.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
+}
+
 function getPowerPellet(args) {
-	let inner = args.innerHTML;
-	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
+	let inner = getInner(args); 
 	if (inner.includes('pellet')) {
-		// enable 'frightened mode' (ghosts are edible)
-		let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
-		let frightGhostNames = ['frightpinkghost', 'frightcyanghost', 'frightredghost', 'frightorangeghost']; 
+		removeChild(args); 
 		for (var i = 0; i < ghostNames.length; i++) {
 			var g = document.getElementsByClassName(ghostNames[i])[0];
-			g.classList.remove(ghostNames[i]);
-			g.classList.add(frightGhostNames[i]);			
-			while (args.firstChild) args.removeChild(args.firstChild);
+			g.classList.add('fright');		
 		}
-		// return to regular mode after some time 
-		setTimeout(function(){ 
-			let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
-			let frightGhostNames = ['frightpinkghost', 'frightcyanghost', 'frightredghost', 'frightorangeghost']; 
+		setTimeout(function(){
 			for (var i = 0; i < ghostNames.length; i++) {
-				var g = document.getElementsByClassName(frightGhostNames[i])[0];
-				g.classList.remove(frightGhostNames[i]);
-				g.classList.add(ghostNames[i]);			
+				var y = document.getElementsByClassName(ghostNames[i])[0];
+				y.classList.remove('fright');		
 			}
-		}, 3000);
+		}, 7500);
 	}
 }
 
 function getToken(args) {
-	let inner = args.innerHTML;
-	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
+	let inner = getInner(args); 
 	if (inner.includes('token')) {
 		tokens++; 
 		tokenCount.textContent = `Tokens: ${tokens}`;
-		while (args.firstChild) args.removeChild(args.firstChild);
+		removeChild(args);
 	}
 }
 
 function getGhost(args) {
-	let inner = args.innerHTML;
-	inner = inner.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
-	let ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
+	let inner = getInner(args); 
 	if(ghostNames.some(el => inner.includes(el))) {
-		points++; 
-		pointCount.textContent = `Points: ${points}`;
-		while (args.firstChild) args.removeChild(args.firstChild);
+		if (inner.includes('fright')) {
+			let index = inner.indexOf('ghost');
+			inner = inner.substring(0, index + 5).split(' ').pop().trim();
+			deadGhosts.push(inner);
+			ghostNames = ghostNames.filter(e => e !== inner);
+			points++; 
+			pointCount.textContent = `Points: ${points}`;
+			removeChild(args);
+		}
 	}
 }
 
 // remove tokens inside ghost box 
 let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
 for (var i = 0; i < removeTokens.length; i++) {
-	while (colors[removeTokens[i]].firstChild) colors[removeTokens[i]].removeChild(colors[removeTokens[i]].firstChild);
+	removeChild(colors[removeTokens[i]]);
 } 
 
 function populateGhosts() {
-	var redghostdiv = document.createElement('div');
-	redghostdiv.classList.add('piece', 'redghost');
-	colors[376].appendChild(redghostdiv);
+	// color + board location
+	function genGhostDiv(str, int) {
+		var elem = str + 'ghostdiv';
+		elem = document.createElement('div');
+		var ghostclass = str + 'ghost';
+		elem.classList.add('piece', ghostclass);
+		colors[int].appendChild(elem);
+	}
 
-	var pinkghostdiv = document.createElement('div');
-	pinkghostdiv.classList.add('piece', 'pinkghost');
-	colors[377].appendChild(pinkghostdiv);
-
-	var cyanghostdiv = document.createElement('div');
-	cyanghostdiv.classList.add('piece', 'cyanghost');
-	colors[378].appendChild(cyanghostdiv);
-
-	var orangeghostdiv = document.createElement('div');
-	orangeghostdiv.classList.add('piece', 'orangeghost');
-	colors[379].appendChild(orangeghostdiv); 
+	genGhostDiv('red', 376)
+	genGhostDiv('pink', 377)
+	genGhostDiv('cyan', 378)
+	genGhostDiv('orange', 379) 
 }
 
 populateGhosts();
 
-// initialize snake length 
-function snakeChange() {
-	if (moves > 1) {
-		lastPos[0].classList.remove('piece', 'pacman');
-		backup = lastPos[0];
-		lastPos.shift(); 
-		trimTail = true; 
-	}
-}
-
-// takes 'lastPos' as argument 
-function snakeDies(snake) {
-	// return to menu
+function pacManDies() {
 	setTimeout(function(){
-		for (let i = 0; i < colors.length; i++) {
-	    moves = 0;  
-			lastPos.length = 0;
-			currentPos = 315;
-			foodLocation.length = 0;
-			direction = null; 
-		}
 		menu.style.display = 'block';
 		playField.style.display = 'none';
 	}, 2000);
-
 	 stopGame(); 
 }
 
@@ -237,8 +217,8 @@ function startGame() {
 			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
+			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
-			snakeChange(); 
 		}
 	}
 
@@ -253,8 +233,8 @@ function startGame() {
 			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
+			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
 			lastPos.push(colors[currentPos]);
-			snakeChange();
 		}
 	}
 
@@ -269,8 +249,8 @@ function startGame() {
 			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
+			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
 			lastPos.push(colors[currentPos]);  
-			snakeChange();
 		}
 	}
 
@@ -285,8 +265,8 @@ function startGame() {
 			getPowerPellet(colors[currentPos]);
 			getGhost(colors[currentPos]);
 			colors[currentPos].classList.add('piece', 'pacman');
+			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
 			lastPos.push(colors[currentPos]); 
-			snakeChange();
 		}
 	}
 
