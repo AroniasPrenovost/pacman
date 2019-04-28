@@ -1,6 +1,5 @@
 import {generateTable, colorTable} from './modules/generateTable';
 import {buildWalls} from './modules/walls';
-import {shuffle} from './modules/shuffle';
 
 // initialize 
 generateTable();
@@ -61,7 +60,6 @@ d.onkeydown = d.body.onkeydown = function(e){
 // current board position based on total 'length'
 var currentPos = 315; // is middle start position 
 var lastPos = [];
-var foodLocation = []; 
 var moves = 0;
 
 // board specs 
@@ -159,7 +157,7 @@ function getGhost(args) {
 			points++; 
 			pointCount.textContent = `Points: ${points}`;
 			removeChild(args);
-		} else { // you die 
+		} else { // die 
 			pacManDies(args); 
 		}
 	}
@@ -197,15 +195,22 @@ function pacManDies(args) {
 	removeChild(args); 
 	args.classList.remove('pacman');
 	args.classList.add('dead');
-	setTimeout(function(){
-		resetGame()
-		args.classList.add('pacman');
-		args.classList.remove('dead');
-	}, 2000);
 	stopGame(); 
+	setTimeout(function(){
+		resetGame(); 
+	}, 2000);
 }
 
 function startGame() {
+
+	function pacManMovement() {
+		getToken(colors[currentPos]);
+		getPowerPellet(colors[currentPos]);
+		getGhost(colors[currentPos]);
+		colors[currentPos].classList.add('piece', 'pacman');
+		lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
+		lastPos.push(colors[currentPos]); 
+	}
 
 	// initializes snake + food
 	if (direction === 'down' || direction === 'up' || direction === 'right' || direction === 'left') {
@@ -216,19 +221,15 @@ function startGame() {
 		}
 	}
 
-	if (direction == 'right') {
+
+	if (direction === 'right') {
 		moves++;  
 		currentPos++;
 		if (!checkBoundaries(currentPos)) {
 			direction = null;
 			--currentPos;
 		} else {
-			getToken(colors[currentPos]);
-			getPowerPellet(colors[currentPos]);
-			getGhost(colors[currentPos]);
-			colors[currentPos].classList.add('piece', 'pacman');
-			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
-			lastPos.push(colors[currentPos]);
+			pacManMovement();
 		}
 	}
 
@@ -239,12 +240,7 @@ function startGame() {
 			direction = null;
 			currentPos++; 
 		} else {
-			getToken(colors[currentPos]);
-			getPowerPellet(colors[currentPos]);
-			getGhost(colors[currentPos]);
-			colors[currentPos].classList.add('piece', 'pacman');
-			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
-			lastPos.push(colors[currentPos]);
+			pacManMovement();
 		}
 	}
 
@@ -255,12 +251,7 @@ function startGame() {
 			direction = null;
 			currentPos = currentPos - (rowLength);
 		} else {
-			getToken(colors[currentPos]);
-			getPowerPellet(colors[currentPos]);
-			getGhost(colors[currentPos]);
-			colors[currentPos].classList.add('piece', 'pacman');
-			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
-			lastPos.push(colors[currentPos]);  
+			pacManMovement(); 
 		}
 	}
 
@@ -271,12 +262,7 @@ function startGame() {
 			direction = null;
 			currentPos = currentPos + (rowLength);
 		} else {
-			getToken(colors[currentPos]);
-			getPowerPellet(colors[currentPos]);
-			getGhost(colors[currentPos]);
-			colors[currentPos].classList.add('piece', 'pacman');
-			lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
-			lastPos.push(colors[currentPos]); 
+			pacManMovement();
 		}
 	}
 
