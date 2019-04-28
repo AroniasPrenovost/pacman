@@ -129,6 +129,51 @@ var spots = document.getElementsByClassName('color');
 			spots[i].classList.toggle('wall-right-end');
 		}
 
+			// left first column
+		if (i > 169 && i < 174 ||
+			i > 197 && i < 202 ||
+			i > 225 && i < 230 ||
+			i > 253 && i < 258 ||
+			i > 281 && i < 286 ||
+			i > 309 && i < 314 ||
+			i > 337 && i < 342 ||
+			i > 365 && i < 370 ||
+			i > 393 && i < 398){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
+			// left first column
+		if (i > 174 && i < 176 ||
+			i > 202 && i < 204 ||
+			i > 230 && i < 232 ||
+			i > 258 && i < 260 ||
+			i > 286 && i < 288 ||
+			i > 314 && i < 316 ||
+			i > 342 && i < 344 ||
+			i > 370 && i < 372 ||
+			i > 398 && i < 400){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
+	// left second column
+		if (i > 176 && i < 178 ||
+			i > 204 && i < 206 ||
+			i > 232 && i < 234 ||
+			i > 260 && i < 264 ||
+			i > 288 && i < 290 ||
+			i > 316 && i < 318 ||
+			i > 344 && i < 346 ||
+			i > 372 && i < 374 ||
+			i > 400 && i < 402){
+			spots[i].classList.toggle('wall');
+			spots[i].classList.toggle('wall-left-end');
+			spots[i].classList.toggle('wall-right-end');
+		}
+
 		// middle top row jutt out 
 		if (i > 178 && i < 185 ||
 			i > 206 && i < 213 ||

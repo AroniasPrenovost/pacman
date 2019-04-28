@@ -58,7 +58,7 @@ d.onkeydown = d.body.onkeydown = function(e){
 }
 
 // current board position based on total 'length'
-var currentPos = 315; // is middle start position 
+var currentPos = 316; // is middle start position 
 var lastPos = [];
 var moves = 0;
 
@@ -169,29 +169,44 @@ for (var i = 0; i < removeTokens.length; i++) {
 	removeChild(colors[removeTokens[i]]);
 } 
 
-function populateGhosts() {
-	function genGhostDiv(str, int) { // color + board location
-		var elem = str + 'ghostdiv';
-		elem = document.createElement('div');
-		var ghostclass = str + 'ghost';
-		elem.classList.add('piece', ghostclass);
-		colors[int].appendChild(elem);
-	}
-
-	genGhostDiv('red', 376)
-	genGhostDiv('pink', 377)
-	genGhostDiv('cyan', 378)
-	genGhostDiv('orange', 379) 
+// populateGhosts
+function genGhostDiv(str, int) { // color + board location
+	var elem = str + 'ghostdiv';
+	elem = document.createElement('div');
+	var ghostclass = str + 'ghost';
+	elem.classList.add('piece', ghostclass);
+	colors[int].appendChild(elem);
 }
 
-populateGhosts();
+genGhostDiv('red', 376);
+genGhostDiv('pink', 377);
+genGhostDiv('cyan', 378);
+genGhostDiv('orange', 379);
+
+var pinkGhost = document.getElementsByClassName('pinkghost')[0];
+var redGhost = document.getElementsByClassName('redghost')[0];
+var cyanGhost = document.getElementsByClassName('cyanghost')[0];
+var orangeGhost = document.getElementsByClassName('orangeghost')[0];
+
+var redPos = 376; 
+var redDir = null; 
+
+var pinkPos = 377; 
+var pinkDir = null;
+var pinkLastPos = [];
+
+var cyanPos = 378; 
+var cyanDir = null; 
+
+var orangePos = 379;
+var orangeDir = null;    
 
 function resetGame() {
 	direction = null; 
 	menu.style.display = 'block';
 	playField.style.display = 'none';
 
-	currentPos = 315;  
+	currentPos = 316;  
 	lastPos = [];
 	moves = 0;
 	points = 0; 
@@ -214,7 +229,10 @@ function resetGame() {
 		removeChild(colors[removeTokens[i]]);
 	}
 
-	populateGhosts();
+	genGhostDiv('red', 376);
+	genGhostDiv('pink', 377);
+	genGhostDiv('cyan', 378);
+	genGhostDiv('orange', 379); 
 }
 
 function pacManDies(args) {
@@ -227,6 +245,7 @@ function pacManDies(args) {
 	}, 2000);
 }
 
+
 function startGame() {
 
 	function pacManMovement() {
@@ -238,15 +257,38 @@ function startGame() {
 		lastPos.push(colors[currentPos]); 
 	}
 
+	function ghostMovement() {
+		// to do - 'getPacMan' function 	
+		genGhostDiv('pink', pinkPos);
+		var x = pinkLastPos[pinkLastPos.length-1];
+		var elements = x.getElementsByClassName('pinkghost');
+		while (elements[0]) {
+    	elements[0].parentNode.removeChild(elements[0]);
+		}
+	}
+
 	// initializes snake + food
 	if (direction === 'down' || direction === 'up' || direction === 'right' || direction === 'left') {
 		if (moves === 0) {
 			colors[currentPos].classList.add('piece', 'pacman');
 			moves++;
-			lastPos.push(colors[currentPos]); 
+			lastPos.push(colors[currentPos]);
 		}
 	}
 
+	// if (pinkGhost) {
+	// 	pinkDir = 'up';
+	// 	if (pinkDir === 'up') {
+	// 		pinkLastPos.push(colors[pinkPos]);
+	// 		pinkPos = pinkPos - (rowLength); 
+	// 		if (!checkBoundaries(pinkPos)) {
+	// 			direction = null;
+	// 			pinkPos = pinkPos + (rowLength);
+	// 		} else { 
+	// 			ghostMovement();
+	// 		}
+	// 	}
+	// }
 
 	if (direction === 'right') {
 		moves++;  
