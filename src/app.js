@@ -164,7 +164,10 @@ function getGhost(args) {
 }
 
 // remove tokens inside ghost box 
-let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
+
+// 349 is missing 
+
+let removeTokens = [348, 350, 351, 376, 377, 378, 379];
 for (var i = 0; i < removeTokens.length; i++) {
 	removeChild(colors[removeTokens[i]]);
 } 
@@ -257,14 +260,27 @@ function startGame() {
 		lastPos.push(colors[currentPos]); 
 	}
 
-	function ghostMovement() {
-		// to do - 'getPacMan' function 	
+	function ghostMovement() {	
 		genGhostDiv('pink', pinkPos);
 		var x = pinkLastPos[pinkLastPos.length-1];
-		var elements = x.getElementsByClassName('pinkghost');
-		while (elements[0]) {
-    	elements[0].parentNode.removeChild(elements[0]);
-		}
+		var pinkg = x.getElementsByClassName('pinkghost');
+		var tokeng = x.getElementsByClassName('token');
+		var previousTokenElem = x.getElementsByClassName('token');
+		var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
+		
+		while (pinkg[0]) {
+			pinkg[0].parentNode.removeChild(pinkg[0]); 
+			if (tokeng[0]) {
+				tokeng[0].style.width = '10px';
+				tokeng[0].style.height = '10px';
+			}
+		} 		
+
+		// set width to zero on current token
+		if (currentTokenElem) {
+			currentTokenElem[0].style.width = '0px';
+			currentTokenElem[0].style.height = '0px';
+		} 
 	}
 
 	// initializes snake + food
@@ -276,19 +292,31 @@ function startGame() {
 		}
 	}
 
-	// if (pinkGhost) {
-	// 	pinkDir = 'up';
-	// 	if (pinkDir === 'up') {
-	// 		pinkLastPos.push(colors[pinkPos]);
-	// 		pinkPos = pinkPos - (rowLength); 
-	// 		if (!checkBoundaries(pinkPos)) {
-	// 			direction = null;
-	// 			pinkPos = pinkPos + (rowLength);
-	// 		} else { 
-	// 			ghostMovement();
-	// 		}
-	// 	}
-	// }
+	if (pinkGhost) {
+		pinkDir = 'up';  // ----- hardcode 
+		if (pinkDir === 'up') {
+			pinkLastPos.push(colors[pinkPos]);
+			pinkPos = pinkPos - (rowLength); 
+			if (!checkBoundaries(pinkPos)) {
+				pinkDir = null;
+				pinkPos = pinkPos + (rowLength);
+				// pinkDir = 'right';  // ----- hardcode 
+			} else { 
+				ghostMovement();
+			}
+		}
+
+		// if (pinkDir === 'right') {
+		// 	pinkLastPos.push(colors[pinkPos]);
+		// 	pinkPos++;
+		// 	if (!checkBoundaries(pinkPos)) {
+		// 		pinkDir = null;
+		// 		--pinkPos;
+		// 	} else { 
+		// 		ghostMovement();
+		// 	}
+		// }
+	}
 
 	if (direction === 'right') {
 		moves++;  
