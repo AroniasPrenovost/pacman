@@ -146,9 +146,9 @@ function getToken(args) {
 	}
 }
 
-function getGhost(args) {
-	// if div contains 2 children, it contains a ghost
-	// ghosts can't be killed inside castle  
+// if div contains 2 children, it contains a ghost
+// if 3, the ghost is 'frightened'. ghosts can't be killed inside castle 
+function getGhost(args) { 
 	let argsArr = Object.values(args.children);
 	if (argsArr.length === 2) {
 		let classes = argsArr[1].classList; 
@@ -166,9 +166,7 @@ function getGhost(args) {
 	}
 }
 
-
-// 349 is missing 
-let removeTokens = [348, 350, 351, 376, 377, 378, 379];
+let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
 for (var i = 0; i < removeTokens.length; i++) {
 	removeChild(colors[removeTokens[i]]);
 } 
@@ -193,17 +191,17 @@ var cyanGhost = document.getElementsByClassName('cyanghost')[0];
 var orangeGhost = document.getElementsByClassName('orangeghost')[0];
 
 var redPos = 376; 
-var redDir = null; 
+var redDir = 'up'; 
 
 var pinkPos = 377; 
-var pinkDir = null;
+var pinkDir = 'up';
 var pinkLastPos = [];
 
 var cyanPos = 378; 
-var cyanDir = null; 
+var cyanDir = 'up'; 
 
 var orangePos = 379;
-var orangeDir = null;    
+var orangeDir = 'up';    
 
 function resetGame() {
 	direction = null; 
@@ -249,6 +247,14 @@ function pacManDies(args) {
 	}, 2000);
 }
 
+// shuffle 
+function shuffle(a) {
+	for (let i = a.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[a[i], a[j]] = [a[j], a[i]];
+	}
+	return a;
+}
 
 function startGame() {
 
@@ -293,33 +299,53 @@ function startGame() {
 		}
 	}
 
+	var ghostDirections = ['up', 'down', 'right', 'left']; 
+
 	if (pinkGhost) {
-		pinkDir = 'up';  // ----- hardcode 
-		if (pinkDir === 'up') {
-			pinkLastPos.push(colors[pinkPos]);
-			pinkPos = pinkPos - (rowLength); 
+		if (moves > 10) {
+
+		pinkLastPos.push(colors[pinkPos]);
+		
+			if (pinkDir === 'up') {
+				pinkPos = pinkPos - (rowLength); 
+			} 
+
+			if (pinkDir === 'down') {
+				pinkPos+=rowLength;  
+			} 
+
+			if (pinkDir === 'right') {
+				pinkPos++;
+			} 
+
+			if (pinkDir === 'left') {
+				--pinkPos;  
+			} 		
+
 			if (!checkBoundaries(pinkPos)) {
-				pinkDir = null;
-				pinkPos = pinkPos + (rowLength);
-				// pinkDir = 'right';  // ----- hardcode 
+
+				if (pinkDir === 'up') {
+					pinkPos = pinkPos + (rowLength); 
+				} 
+
+				if (pinkDir === 'down') {
+					pinkPos = pinkPos - (rowLength);
+				} 
+
+				if (pinkDir === 'right') {
+					--pinkPos;
+				} 
+
+				if (pinkDir === 'left') {
+					pinkPos++; 
+				} 			
+
+				pinkDir = shuffle(ghostDirections)[0];
+				
 			} else { 
 				ghostMovement();
 			}
 		}
-
-		// if (pinkDir === 'right') {
-		// 	pinkLastPos.push(colors[pinkPos]);
-		// 	pinkPos++;
-		// 	if (!checkBoundaries(pinkPos)) {
-		// 		pinkDir = null;
-		// 		--pinkPos;
-		// 	} else { 
-		// 		ghostMovement();
-		// 	}
-		// }
-
-
-		// goes with this one 
 	}
 
 	if (direction === 'right') {
