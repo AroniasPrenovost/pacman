@@ -147,26 +147,27 @@ function getToken(args) {
 }
 
 function getGhost(args) {
-	let inner = getInner(args); 
-	if(ghostNames.some(el => inner.includes(el))) {
-		if (inner.includes('fright')) {
-			let index = inner.indexOf('ghost');
-			inner = inner.substring(0, index + 5).split(' ').pop().trim();
-			deadGhosts.push(inner);
-			ghostNames = ghostNames.filter(e => e !== inner);
+	// if div contains 2 children, it contains a ghost
+	// ghosts can't be killed inside castle  
+	let argsArr = Object.values(args.children);
+	if (argsArr.length === 2) {
+		let classes = argsArr[1].classList; 
+		if (classes.length === 2) {
+			pacManDies(args); 
+		} 
+		if (classes.length === 3) {
+			let ghostClass = argsArr[1].classList[1].trim();
+			ghostNames = ghostNames.filter(e => e !== ghostClass);
+			deadGhosts.push(ghostClass); 
 			points++; 
 			pointCount.textContent = `Points: ${points}`;
 			removeChild(args);
-		} else { // die 
-			pacManDies(args); 
 		}
 	}
 }
 
-// remove tokens inside ghost box 
 
 // 349 is missing 
-
 let removeTokens = [348, 350, 351, 376, 377, 378, 379];
 for (var i = 0; i < removeTokens.length; i++) {
 	removeChild(colors[removeTokens[i]]);
@@ -252,9 +253,9 @@ function pacManDies(args) {
 function startGame() {
 
 	function pacManMovement() {
+		getGhost(colors[currentPos]);
 		getToken(colors[currentPos]);
 		getPowerPellet(colors[currentPos]);
-		getGhost(colors[currentPos]);
 		colors[currentPos].classList.add('piece', 'pacman');
 		lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
 		lastPos.push(colors[currentPos]); 
@@ -316,6 +317,9 @@ function startGame() {
 		// 		ghostMovement();
 		// 	}
 		// }
+
+
+		// goes with this one 
 	}
 
 	if (direction === 'right') {
