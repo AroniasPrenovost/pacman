@@ -83,7 +83,9 @@ table, th, td {
   background-color: #f39c12 !important; }
 
 .pellet {
-  background-color: #6c4dc4 !important; }
+  background-color: #6c4dc4 !important;
+  width: 10px;
+  height: 10px; }
 
 .pacman {
   background-color: #ffee00 !important; }

@@ -266,87 +266,77 @@ function shuffle(a) {
 }
 
 // -- end ghost movemenet -- // 
+function startPinkGhost() {
+	function ghostMovement() {	
+		genGhostDiv('pink', pinkPos);
+		var x = pinkLastPos[pinkLastPos.length-1];
+		var pinkg = x.getElementsByClassName('pinkghost');
+		var pinkfright = x.getElementsByClassName('fright');
+		var tokeng = x.getElementsByClassName('token');
+		var previousTokenElem = x.getElementsByClassName('token');
+		var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
 
-function ghostMovement() {	
-	genGhostDiv('pink', pinkPos);
-	var x = pinkLastPos[pinkLastPos.length-1];
-	var pinkg = x.getElementsByClassName('pinkghost');
-	var pinkfright = x.getElementsByClassName('fright');
-	var tokeng = x.getElementsByClassName('token');
-	var previousTokenElem = x.getElementsByClassName('token');
-	var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
-
-	// account for 'fright' class that must follow ghost 
-	// while (pinkfright[0]) {
-	// 	pinkfright[0].classList.remove('fright'); 
-	// } 
-
-	while (pinkg[0]) {
-		pinkg[0].parentNode.removeChild(pinkg[0]); 
-		if (tokeng[0]) {
-			tokeng[0].style.width = '5px';
-			tokeng[0].style.height = '5px';
-		}
-	} 		
-
-	// set width to zero on current token
-	if (currentTokenElem) {
-		currentTokenElem[0].style.width = '0px';
-		currentTokenElem[0].style.height = '0px';
-	} 
-}
-
-	// ghost logic needs to be separate from pacman movement
-	// to do... 
-
-var ghostDirections = ['up', 'down', 'right', 'left']; 
-if (pinkGhost) {
-	if (moves > 10) {
-
-	pinkLastPos.push(colors[pinkPos]);
-	
-		if (pinkDir === 'up') {
-			pinkPos = pinkPos - (rowLength); 
-		} 
-
-		if (pinkDir === 'down') {
-			pinkPos+=rowLength;  
-		} 
-
-		if (pinkDir === 'right') {
-			pinkPos++;
-		} 
-
-		if (pinkDir === 'left') {
-			--pinkPos;  
+		while (pinkg[0]) {
+			pinkg[0].parentNode.removeChild(pinkg[0]); 
+			if (tokeng[0]) {
+				tokeng[0].style.width = '5px';
+				tokeng[0].style.height = '5px';
+			}
 		} 		
 
-		if (!checkBoundaries(pinkPos)) {
+		// set width to zero on current token
+		if (currentTokenElem) {
+			currentTokenElem[0].style.width = '0px';
+			currentTokenElem[0].style.height = '0px';
+		} 
+	}
 
+	var ghostDirections = ['up', 'down', 'right', 'left']; 
+	if (pinkGhost) {
+		if (moves > 10) {
+			pinkLastPos.push(colors[pinkPos]);
+		
 			if (pinkDir === 'up') {
-				pinkPos = pinkPos + (rowLength); 
+				pinkPos = pinkPos - (rowLength); 
 			} 
 
 			if (pinkDir === 'down') {
-				pinkPos = pinkPos - (rowLength);
+				pinkPos+=rowLength;  
 			} 
 
 			if (pinkDir === 'right') {
-				--pinkPos;
+				pinkPos++;
 			} 
 
 			if (pinkDir === 'left') {
-				pinkPos++; 
-			} 			
+				--pinkPos;  
+			} 		
 
-			pinkDir = shuffle(ghostDirections)[0];
-			
-		} else { 
-			ghostMovement();
+			if (!checkBoundaries(pinkPos)) {
+
+				if (pinkDir === 'up') {
+					pinkPos = pinkPos + (rowLength); 
+				} 
+
+				if (pinkDir === 'down') {
+					pinkPos = pinkPos - (rowLength);
+				} 
+
+				if (pinkDir === 'right') {
+					--pinkPos;
+				} 
+
+				if (pinkDir === 'left') {
+					pinkPos++; 
+				} 			
+
+				pinkDir = shuffle(ghostDirections)[0];
+			} else { 
+				ghostMovement();
+			}
 		}
 	}
 }
-
 // -- end ghost movemenet -- // 
 
 function startGame() {
@@ -415,6 +405,10 @@ function startGame() {
 
 	if (moves === 10) {
 		openGhostDoor();
+	}
+
+	if (moves > 10) {
+		startPinkGhost(); 
 	}
 
 	d.onkeyup = d.body.onkeyup = function(e){
