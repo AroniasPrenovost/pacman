@@ -120,10 +120,12 @@ function getInner(args) {
 	return args.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
 }
 
+var frightModeFlag = false; 
 function getPowerPellet(args) {
 	let inner = getInner(args); 
 	if (inner.includes('pellet')) {
-		removeChild(args); 
+		removeChild(args);
+		frightModeFlag = true; 
 		for (var i = 0; i < ghostNames.length; i++) {
 			var g = document.getElementsByClassName(ghostNames[i])[0];
 			g.classList.add('fright');		
@@ -131,7 +133,8 @@ function getPowerPellet(args) {
 		setTimeout(function(){
 			for (var i = 0; i < ghostNames.length; i++) {
 				var y = document.getElementsByClassName(ghostNames[i])[0];
-				y.classList.remove('fright');		
+				y.classList.remove('fright');
+				frightModeFlag = false;		
 			}
 		}, 7500);
 	}
@@ -177,6 +180,9 @@ function genGhostDiv(str, int) { // color + board location
 	elem = document.createElement('div');
 	var ghostclass = str + 'ghost';
 	elem.classList.add('piece', ghostclass);
+	if (frightModeFlag === true) {
+		elem.classList.add('fright');
+	}
 	colors[int].appendChild(elem);
 }
 
@@ -215,6 +221,9 @@ function resetGame() {
 	tokens = 0;
 	tokenCount.textContent = `Tokens: ${tokens}`;
 	pointCount.textContent = `Points: ${points}`;
+
+	// reset ghosts
+	// to do... 
 
 	var elem = document.getElementById('table');
 	elem.remove();
@@ -256,6 +265,90 @@ function shuffle(a) {
 	return a;
 }
 
+// -- end ghost movemenet -- // 
+
+function ghostMovement() {	
+	genGhostDiv('pink', pinkPos);
+	var x = pinkLastPos[pinkLastPos.length-1];
+	var pinkg = x.getElementsByClassName('pinkghost');
+	var pinkfright = x.getElementsByClassName('fright');
+	var tokeng = x.getElementsByClassName('token');
+	var previousTokenElem = x.getElementsByClassName('token');
+	var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
+
+	// account for 'fright' class that must follow ghost 
+	// while (pinkfright[0]) {
+	// 	pinkfright[0].classList.remove('fright'); 
+	// } 
+
+	while (pinkg[0]) {
+		pinkg[0].parentNode.removeChild(pinkg[0]); 
+		if (tokeng[0]) {
+			tokeng[0].style.width = '10px';
+			tokeng[0].style.height = '10px';
+		}
+	} 		
+
+	// set width to zero on current token
+	if (currentTokenElem) {
+		currentTokenElem[0].style.width = '0px';
+		currentTokenElem[0].style.height = '0px';
+	} 
+}
+
+	// ghost logic needs to be separate from pacman movement
+	// to do... 
+
+var ghostDirections = ['up', 'down', 'right', 'left']; 
+if (pinkGhost) {
+	if (moves > 10) {
+
+	pinkLastPos.push(colors[pinkPos]);
+	
+		if (pinkDir === 'up') {
+			pinkPos = pinkPos - (rowLength); 
+		} 
+
+		if (pinkDir === 'down') {
+			pinkPos+=rowLength;  
+		} 
+
+		if (pinkDir === 'right') {
+			pinkPos++;
+		} 
+
+		if (pinkDir === 'left') {
+			--pinkPos;  
+		} 		
+
+		if (!checkBoundaries(pinkPos)) {
+
+			if (pinkDir === 'up') {
+				pinkPos = pinkPos + (rowLength); 
+			} 
+
+			if (pinkDir === 'down') {
+				pinkPos = pinkPos - (rowLength);
+			} 
+
+			if (pinkDir === 'right') {
+				--pinkPos;
+			} 
+
+			if (pinkDir === 'left') {
+				pinkPos++; 
+			} 			
+
+			pinkDir = shuffle(ghostDirections)[0];
+			
+		} else { 
+			ghostMovement();
+		}
+	}
+}
+
+// -- end ghost movemenet -- // 
+
 function startGame() {
 
 	function pacManMovement() {
@@ -267,84 +360,12 @@ function startGame() {
 		lastPos.push(colors[currentPos]); 
 	}
 
-	function ghostMovement() {	
-		genGhostDiv('pink', pinkPos);
-		var x = pinkLastPos[pinkLastPos.length-1];
-		var pinkg = x.getElementsByClassName('pinkghost');
-		var tokeng = x.getElementsByClassName('token');
-		var previousTokenElem = x.getElementsByClassName('token');
-		var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
-		
-		while (pinkg[0]) {
-			pinkg[0].parentNode.removeChild(pinkg[0]); 
-			if (tokeng[0]) {
-				tokeng[0].style.width = '10px';
-				tokeng[0].style.height = '10px';
-			}
-		} 		
-
-		// set width to zero on current token
-		if (currentTokenElem) {
-			currentTokenElem[0].style.width = '0px';
-			currentTokenElem[0].style.height = '0px';
-		} 
-	}
-
 	// initializes snake + food
 	if (direction === 'down' || direction === 'up' || direction === 'right' || direction === 'left') {
 		if (moves === 0) {
 			colors[currentPos].classList.add('piece', 'pacman');
 			moves++;
 			lastPos.push(colors[currentPos]);
-		}
-	}
-
-	var ghostDirections = ['up', 'down', 'right', 'left']; 
-
-	if (pinkGhost) {
-		if (moves > 10) {
-
-		pinkLastPos.push(colors[pinkPos]);
-		
-			if (pinkDir === 'up') {
-				pinkPos = pinkPos - (rowLength); 
-			} 
-
-			if (pinkDir === 'down') {
-				pinkPos+=rowLength;  
-			} 
-
-			if (pinkDir === 'right') {
-				pinkPos++;
-			} 
-
-			if (pinkDir === 'left') {
-				--pinkPos;  
-			} 		
-
-			if (!checkBoundaries(pinkPos)) {
-
-				if (pinkDir === 'up') {
-					pinkPos = pinkPos + (rowLength); 
-				} 
-
-				if (pinkDir === 'down') {
-					pinkPos = pinkPos - (rowLength);
-				} 
-
-				if (pinkDir === 'right') {
-					--pinkPos;
-				} 
-
-				if (pinkDir === 'left') {
-					pinkPos++; 
-				} 			
-
-				pinkDir = shuffle(ghostDirections)[0];
-				
-			} else { 
-				ghostMovement();
-			}
 		}
 	}
 

@@ -40,11 +40,14 @@ table {
 td {
   background-color: transparent;
   /* outer, trimmed table secton. not apart of play field */
-  border: 1px solid #f7f1e3;
+  border: 0px solid #f7f1e3;
   font-size: 10px;
   vertical-align: bottom;
   min-width: 12px;
   padding: 0 0 4px 0; }
+
+td.color.wall {
+  background-color: #3742fa !important; }
 
 tr {
   line-height: 0px;
@@ -54,19 +57,19 @@ tr {
 table, th, td {
   border: 0px;
   border-collapse: collapse;
-  border: 1px solid green; }
+  border: 0px solid transparent; }
 
 /* walls */
 .wall {
   background-color: black;
-  border-top: 6px solid #20265a;
-  border-bottom: 6px solid #20265a; }
+  border-top: 3px solid #20265a;
+  border-bottom: 3px solid #20265a; }
 
 .wall-left-end {
-  border-left: 6px solid #20265a; }
+  border-left: 3px solid #20265a; }
 
 .wall-right-end {
-  border-right: 6px solid #20265a; }
+  border-right: 3px solid #20265a; }
 
 /* characters */
 .piece {
