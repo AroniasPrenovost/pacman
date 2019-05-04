@@ -91,8 +91,8 @@ table, th, td {
   position: relative;
   bottom: 50%;
   margin: 0 auto;
-  width:10px;
-	height:10px;
+  width:5px;
+	height:5px;
 }
 
 .token {
@@ -113,22 +113,26 @@ table, th, td {
 
 .redghost {
 	background-color: rgb(255, 0, 0) !important; 
+	width:10px;
+	height:10px; 
 }
 
 .pinkghost {
 	background-color: rgb(255, 184, 255) !important;
+	width:10px;
+	height:10px; 
 }
 
 .cyanghost {
 	background-color: rgb(0, 255, 255) !important; 
+	width:10px;
+	height:10px; 
 }
 
 .orangeghost {
 	background-color: rgb(255, 184, 82) !important; 
-}
-
-.ghost {
-	background-color: rgb(33, 33, 222) !important; 
+	width:10px;
+	height:10px; 
 }
 
 .fright {

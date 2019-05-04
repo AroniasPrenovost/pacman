@@ -76,8 +76,8 @@ table, th, td {
   position: relative;
   bottom: 50%;
   margin: 0 auto;
-  width: 10px;
-  height: 10px; }
+  width: 5px;
+  height: 5px; }
 
 .token {
   background-color: #f39c12 !important; }
@@ -92,19 +92,24 @@ table, th, td {
   background-color: black !important; }
 
 .redghost {
-  background-color: red !important; }
+  background-color: red !important;
+  width: 10px;
+  height: 10px; }
 
 .pinkghost {
-  background-color: #ffb8ff !important; }
+  background-color: #ffb8ff !important;
+  width: 10px;
+  height: 10px; }
 
 .cyanghost {
-  background-color: cyan !important; }
+  background-color: cyan !important;
+  width: 10px;
+  height: 10px; }
 
 .orangeghost {
-  background-color: #ffb852 !important; }
-
-.ghost {
-  background-color: #2121de !important; }
+  background-color: #ffb852 !important;
+  width: 10px;
+  height: 10px; }
 
 .fright {
   background-color: #3742fa !important; }

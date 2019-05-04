@@ -284,8 +284,8 @@ function ghostMovement() {
 	while (pinkg[0]) {
 		pinkg[0].parentNode.removeChild(pinkg[0]); 
 		if (tokeng[0]) {
-			tokeng[0].style.width = '10px';
-			tokeng[0].style.height = '10px';
+			tokeng[0].style.width = '5px';
+			tokeng[0].style.height = '5px';
 		}
 	} 		
 
