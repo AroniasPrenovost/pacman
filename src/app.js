@@ -158,14 +158,16 @@ function getGhost(args) {
 		if (classes.length === 2) {
 			pacManDies(args); 
 		} 
+		// ghost has 'frightened' class
 		if (classes.length === 3) {
 			let ghostClass = argsArr[1].classList[1].trim();
+			document.getElementsByClassName(ghostClass)[0].remove();
+			pinkGhostLife = false; 
 			ghostNames = ghostNames.filter(e => e !== ghostClass);
 			deadGhosts.push(ghostClass); 
 			points++; 
 			pointCount.textContent = `Points: ${points}`;
-			removeChild(args);
-		}
+		} 
 	}
 }
 
@@ -202,6 +204,7 @@ var redDir = 'up';
 var pinkPos = 377; 
 var pinkDir = 'up';
 var pinkLastPos = [];
+var pinkGhostLife = true;
 
 var cyanPos = 378; 
 var cyanDir = 'up'; 
@@ -285,7 +288,9 @@ function startPinkGhost() {
 		} 		
 
 		// set width to zero on current token
-		if (currentTokenElem) {
+		if (!currentTokenElem) {
+			return false; 
+		} else  {
 			currentTokenElem[0].style.width = '0px';
 			currentTokenElem[0].style.height = '0px';
 		} 
@@ -407,7 +412,7 @@ function startGame() {
 		openGhostDoor();
 	}
 
-	if (moves > 10) {
+	if (moves > 10 && pinkGhostLife) {
 		startPinkGhost(); 
 	}
 
