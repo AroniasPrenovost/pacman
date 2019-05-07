@@ -345,7 +345,6 @@ function startPinkGhost() {
 // -- end ghost movemenet -- // 
 
 function startGame() {
-
 	function pacManMovement() {
 		getGhost(colors[currentPos]);
 		getToken(colors[currentPos]);
