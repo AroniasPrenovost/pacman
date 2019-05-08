@@ -333,8 +333,8 @@ function startPinkGhost() {
 
 				if (pinkDir === 'left') {
 					pinkPos++; 
-				} 			
-
+				} 	
+				
 				pinkDir = shuffle(ghostDirections)[0];
 			} else { 
 				ghostMovement();
@@ -342,6 +342,7 @@ function startPinkGhost() {
 		}
 	}
 }
+
 // -- end ghost movemenet -- // 
 
 function startGame() {
@@ -411,8 +412,10 @@ function startGame() {
 		openGhostDoor();
 	}
 
-	if (moves > 10 && pinkGhostLife) {
-		startPinkGhost(); 
+	if (moves > 10) {
+		if (pinkGhostLife) {
+			startPinkGhost();
+		} 
 	}
 
 	d.onkeyup = d.body.onkeyup = function(e){

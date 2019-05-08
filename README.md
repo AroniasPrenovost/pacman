@@ -9,5 +9,7 @@
 ### if you receive a message such as 'Error - "Task function must be specified"'
 ### $ npm install gulp@3.9.1 --save
 
+### upon start, press up, down, right, or left arrow keys to begin game
+
 
 
