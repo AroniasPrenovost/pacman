@@ -1,15 +1,11 @@
-## Gulp, Sass, webpack and ES6 modules boilerplate
+## Pacman in JavaScript 
 
-### 1. clone repo
-### 2. $ npm install 
-### 3. npm start
+Once you've selected a speed ('slug', 'worm', or 'python'), begin playing
+by pressing any keyboard arrow key.
 
-### runs 'webpack -d --watch' and 'gulp watchy' simultaneously
-
-### if you receive a message such as 'Error - "Task function must be specified"'
-### $ npm install gulp@3.9.1 --save
-
-### upon start, press up, down, right, or left arrow keys to begin game
-
-
-
+```
+$ npm install ; npm install gulp@3.9.1 --save
+```
+```
+$ npm start
+```

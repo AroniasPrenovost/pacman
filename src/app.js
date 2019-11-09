@@ -1,24 +1,24 @@
-import {generateTable, colorTable} from './modules/generateTable';
-import {buildWalls} from './modules/walls';
+import { generateTable, colorTable } from './modules/generateTable';
+import { buildWalls } from './modules/walls';
 
 // initialize 
 generateTable();
 var colors = document.getElementsByClassName('color');
 colorTable(colors, 'white');
 
-var gameVar; 
+var gameVar;
 function stopGame() {
-    clearInterval(gameVar);
+	clearInterval(gameVar);
 }
 
 function initGame(time) {
-    gameVar = setInterval(startGame, time);
+	gameVar = setInterval(startGame, time);
 }
 
 var menu = document.querySelector('.menu');
 var playField = document.getElementById('myDynamicTable');
 
-document.getElementById('slow').onclick = function(){ 
+document.getElementById('slow').onclick = function () {
 	initGame(200);
 	menu.style.display = 'none';
 	playField.style.display = 'block';
@@ -28,32 +28,32 @@ var tokens = 0;
 var tokenCount = document.getElementById('tokens');
 tokenCount.textContent = `Tokens: ${tokens}`;
 
-var points = 0;  
+var points = 0;
 var pointCount = document.getElementById('points');
 pointCount.textContent = `Points: ${points}`;
 
 // arrow key press
 var d = document;
-var direction; 
-d.onkeydown = d.body.onkeydown = function(e){
+var direction;
+d.onkeydown = d.body.onkeydown = function (e) {
 	e = e || window.event;
 
 	switch (e.keyCode || e.which) {
-	  case 37:
-	    direction = 'left';
-	    
-	    break;
-	  case 38:
-	    direction = 'up';
-	    break;
-	  case 39:
-	     direction = 'right';
-	    break;
-	  case 40:
-	    direction = 'down';
-	    break;
-	  case 4:
-	    direction = null;
+		case 37:
+			direction = 'left';
+
+			break;
+		case 38:
+			direction = 'up';
+			break;
+		case 39:
+			direction = 'right';
+			break;
+		case 40:
+			direction = 'down';
+			break;
+		case 4:
+			direction = null;
 	}
 }
 
@@ -65,15 +65,15 @@ var moves = 0;
 // board specs 
 var tableCells = colors.length;
 var height = document.getElementById('table').rows.length;
-var rowLength = Math.ceil((tableCells/height)); // +1 if #/10 
+var rowLength = Math.ceil((tableCells / height)); // +1 if #/10 
 
 // args is currentPos
 function checkBoundaries(args) {
 	let cell = colors[args].classList;
 	if (cell.contains('wall')) {
-		return false; 
+		return false;
 	}
-	return true; 
+	return true;
 }
 
 // build walls 
@@ -107,43 +107,43 @@ function populatePowerPellets() {
 		var pelletdiv = document.createElement('div');
 		pelletdiv.classList.add('piece', 'pellet');
 		colors[value].appendChild(pelletdiv);
-	}	
+	}
 }
 
 populatePowerPellets();
 
 var ghostNames = ['pinkghost', 'cyanghost', 'redghost', 'orangeghost'];
-var deadGhosts = []; 
+var deadGhosts = [];
 
 function getInner(args) {
-	args = args.innerHTML; 
+	args = args.innerHTML;
 	return args.match(/(?:"[^"]*"|^[^"]*$)/)[0].replace(/"/g, "");
 }
 
-var frightModeFlag = false; 
+var frightModeFlag = false;
 function getPowerPellet(args) {
-	let inner = getInner(args); 
+	let inner = getInner(args);
 	if (inner.includes('pellet')) {
 		removeChild(args);
-		frightModeFlag = true; 
+		frightModeFlag = true;
 		for (var i = 0; i < ghostNames.length; i++) {
 			var g = document.getElementsByClassName(ghostNames[i])[0];
-			g.classList.add('fright');		
+			g.classList.add('fright');
 		}
-		setTimeout(function(){
+		setTimeout(function () {
 			for (var i = 0; i < ghostNames.length; i++) {
 				var y = document.getElementsByClassName(ghostNames[i])[0];
 				y.classList.remove('fright');
-				frightModeFlag = false;		
+				frightModeFlag = false;
 			}
 		}, 7500);
 	}
 }
 
 function getToken(args) {
-	let inner = getInner(args); 
+	let inner = getInner(args);
 	if (inner.includes('token')) {
-		tokens++; 
+		tokens++;
 		tokenCount.textContent = `Tokens: ${tokens}`;
 		removeChild(args);
 	}
@@ -151,30 +151,30 @@ function getToken(args) {
 
 // if div contains 2 children, it contains a ghost
 // if 3, the ghost is 'frightened'. ghosts can't be killed inside castle 
-function getGhost(args) { 
+function getGhost(args) {
 	let argsArr = Object.values(args.children);
 	if (argsArr.length === 2) {
-		let classes = argsArr[1].classList; 
+		let classes = argsArr[1].classList;
 		if (classes.length === 2) {
-			pacManDies(args); 
-		} 
+			pacManDies(args);
+		}
 		// ghost has 'frightened' class
 		if (classes.length === 3) {
 			let ghostClass = argsArr[1].classList[1].trim();
 			document.getElementsByClassName(ghostClass)[0].remove();
-			pinkGhostLife = false; 
+			pinkGhostLife = false;
 			ghostNames = ghostNames.filter(e => e !== ghostClass);
-			deadGhosts.push(ghostClass); 
-			points++; 
+			deadGhosts.push(ghostClass);
+			points++;
 			pointCount.textContent = `Points: ${points}`;
-		} 
+		}
 	}
 }
 
 let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
 for (var i = 0; i < removeTokens.length; i++) {
 	removeChild(colors[removeTokens[i]]);
-} 
+}
 
 // populateGhosts
 function genGhostDiv(str, int) { // color + board location
@@ -198,29 +198,29 @@ var redGhost = document.getElementsByClassName('redghost')[0];
 var cyanGhost = document.getElementsByClassName('cyanghost')[0];
 var orangeGhost = document.getElementsByClassName('orangeghost')[0];
 
-var redPos = 376; 
-var redDir = 'up'; 
+var redPos = 376;
+var redDir = 'up';
 
-var pinkPos = 377; 
+var pinkPos = 377;
 var pinkDir = 'up';
 var pinkLastPos = [];
 var pinkGhostLife = true;
 
-var cyanPos = 378; 
-var cyanDir = 'up'; 
+var cyanPos = 378;
+var cyanDir = 'up';
 
 var orangePos = 379;
-var orangeDir = 'up';    
+var orangeDir = 'up';
 
 function resetGame() {
-	direction = null; 
+	direction = null;
 	menu.style.display = 'block';
 	playField.style.display = 'none';
 
-	currentPos = 316;  
+	currentPos = 316;
 	lastPos = [];
 	moves = 0;
-	points = 0; 
+	points = 0;
 	tokens = 0;
 	tokenCount.textContent = `Tokens: ${tokens}`;
 	pointCount.textContent = `Points: ${points}`;
@@ -235,7 +235,7 @@ function resetGame() {
 	colorTable(colors, 'white');
 
 	buildWalls();
-	populateTokens(); 
+	populateTokens();
 	populatePowerPellets();
 
 	let removeTokens = [348, 349, 350, 351, 376, 377, 378, 379];
@@ -246,16 +246,16 @@ function resetGame() {
 	genGhostDiv('red', 376);
 	genGhostDiv('pink', 377);
 	genGhostDiv('cyan', 378);
-	genGhostDiv('orange', 379); 
+	genGhostDiv('orange', 379);
 }
 
 function pacManDies(args) {
-	removeChild(args); 
+	removeChild(args);
 	args.classList.remove('pacman');
 	args.classList.add('dead');
-	stopGame(); 
-	setTimeout(function(){
-		resetGame(); 
+	stopGame();
+	setTimeout(function () {
+		resetGame();
 	}, 2000);
 }
 
@@ -270,9 +270,9 @@ function shuffle(a) {
 
 // -- end ghost movemenet -- // 
 function startPinkGhost() {
-	function ghostMovement() {	
+	function ghostMovement() {
 		genGhostDiv('pink', pinkPos);
-		var x = pinkLastPos[pinkLastPos.length-1];
+		var x = pinkLastPos[pinkLastPos.length - 1];
 		var pinkg = x.getElementsByClassName('pinkghost');
 		var pinkfright = x.getElementsByClassName('fright');
 		var tokeng = x.getElementsByClassName('token');
@@ -280,63 +280,63 @@ function startPinkGhost() {
 		var currentTokenElem = colors[pinkPos].getElementsByClassName('token');
 
 		while (pinkg[0]) {
-			pinkg[0].parentNode.removeChild(pinkg[0]); 
+			pinkg[0].parentNode.removeChild(pinkg[0]);
 			if (tokeng[0]) {
 				tokeng[0].style.width = '5px';
 				tokeng[0].style.height = '5px';
 			}
-		} 		
+		}
 
 		// set width to zero on current token
 		if (!currentTokenElem) {
-			return false; 
-		} else  {
+			return false;
+		} else {
 			currentTokenElem[0].style.width = '0px';
 			currentTokenElem[0].style.height = '0px';
-		} 
+		}
 	}
 
-	var ghostDirections = ['up', 'down', 'right', 'left']; 
+	var ghostDirections = ['up', 'down', 'right', 'left'];
 	if (pinkGhost) {
 		if (moves > 10) {
 			pinkLastPos.push(colors[pinkPos]);
-		
+
 			if (pinkDir === 'up') {
-				pinkPos = pinkPos - (rowLength); 
-			} 
+				pinkPos = pinkPos - (rowLength);
+			}
 
 			if (pinkDir === 'down') {
-				pinkPos+=rowLength;  
-			} 
+				pinkPos += rowLength;
+			}
 
 			if (pinkDir === 'right') {
 				pinkPos++;
-			} 
+			}
 
 			if (pinkDir === 'left') {
-				--pinkPos;  
-			} 		
+				--pinkPos;
+			}
 
 			if (!checkBoundaries(pinkPos)) {
 
 				if (pinkDir === 'up') {
-					pinkPos = pinkPos + (rowLength); 
-				} 
+					pinkPos = pinkPos + (rowLength);
+				}
 
 				if (pinkDir === 'down') {
 					pinkPos = pinkPos - (rowLength);
-				} 
+				}
 
 				if (pinkDir === 'right') {
 					--pinkPos;
-				} 
+				}
 
 				if (pinkDir === 'left') {
-					pinkPos++; 
-				} 	
-				
+					pinkPos++;
+				}
+
 				pinkDir = shuffle(ghostDirections)[0];
-			} else { 
+			} else {
 				ghostMovement();
 			}
 		}
@@ -351,8 +351,8 @@ function startGame() {
 		getToken(colors[currentPos]);
 		getPowerPellet(colors[currentPos]);
 		colors[currentPos].classList.add('piece', 'pacman');
-		lastPos[lastPos.length-1].classList.remove('piece', 'pacman');
-		lastPos.push(colors[currentPos]); 
+		lastPos[lastPos.length - 1].classList.remove('piece', 'pacman');
+		lastPos.push(colors[currentPos]);
 	}
 
 	// initializes snake + food
@@ -365,7 +365,7 @@ function startGame() {
 	}
 
 	if (direction === 'right') {
-		moves++;  
+		moves++;
 		currentPos++;
 		if (!checkBoundaries(currentPos)) {
 			direction = null;
@@ -380,7 +380,7 @@ function startGame() {
 		--currentPos;
 		if (!checkBoundaries(currentPos)) {
 			direction = null;
-			currentPos++; 
+			currentPos++;
 		} else {
 			pacManMovement();
 		}
@@ -388,12 +388,12 @@ function startGame() {
 
 	if (direction === 'down' && moves > 0) {
 		moves++;
-		currentPos+=rowLength;  
+		currentPos += rowLength;
 		if (!checkBoundaries(currentPos)) {
 			direction = null;
 			currentPos = currentPos - (rowLength);
 		} else {
-			pacManMovement(); 
+			pacManMovement();
 		}
 	}
 
@@ -415,12 +415,12 @@ function startGame() {
 	if (moves > 10) {
 		if (pinkGhostLife) {
 			startPinkGhost();
-		} 
+		}
 	}
 
-	d.onkeyup = d.body.onkeyup = function(e){
-    if(e.keyCode == 32){
-    	stopGame();
-    }
+	d.onkeyup = d.body.onkeyup = function (e) {
+		if (e.keyCode == 32) {
+			stopGame();
+		}
 	}
 } 
